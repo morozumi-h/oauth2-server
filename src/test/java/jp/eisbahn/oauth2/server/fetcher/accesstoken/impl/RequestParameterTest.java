@@ -18,25 +18,18 @@
 
 package jp.eisbahn.oauth2.server.fetcher.accesstoken.impl;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.collections.MapUtils;
+import jp.eisbahn.oauth2.server.fetcher.accesstoken.AccessTokenFetcher.FetchResult;
+import jp.eisbahn.oauth2.server.models.Request;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import jp.eisbahn.oauth2.server.fetcher.accesstoken.AccessTokenFetcher.FetchResult;
-import jp.eisbahn.oauth2.server.fetcher.accesstoken.impl.RequestParameter;
-import jp.eisbahn.oauth2.server.models.Request;
 
 public class RequestParameterTest {
 
@@ -78,37 +71,32 @@ public class RequestParameterTest {
 		Request req;
 		FetchResult parseResult;
 
-		req = createRequestMock(new String[]{
-			"oauth_token", "access_token_value"
-		});
+		req = createRequestMock(new String[] { "oauth_token",
+				"access_token_value" });
 		parseResult = target.fetch(req);
 		assertEquals("access_token_value", parseResult.getToken());
 		assertTrue(parseResult.getParams().isEmpty());
 		verify(req);
 
-		req = createRequestMock(new String[]{
-			"access_token", "access_token_value"
-		});
+		req = createRequestMock(new String[] { "access_token",
+				"access_token_value" });
 		parseResult = target.fetch(req);
 		assertEquals("access_token_value", parseResult.getToken());
 		assertTrue(parseResult.getParams().isEmpty());
 		verify(req);
 
-		req = createRequestMock(new String[]{
-			"access_token", "access_token_value",
-			"foo", "bar"
-		});
+		req = createRequestMock(new String[] { "access_token",
+				"access_token_value", "foo", "bar" });
 		parseResult = target.fetch(req);
 		assertEquals("access_token_value", parseResult.getToken());
 		assertFalse(parseResult.getParams().isEmpty());
-		Map<String, String> params = parseResult.getParams();
+		Map<String, String[]> params = parseResult.getParams();
 		assertEquals(1, params.size());
-		assertEquals("bar", params.get("foo"));
+		assertEquals("bar", params.get("foo")[0]);
 		verify(req);
 	}
 
-	private Request createRequestMock(
-			String oauthToken, String accessToken) {
+	private Request createRequestMock(String oauthToken, String accessToken) {
 		Request request = createMock(Request.class);
 		expect(request.getParameter("oauth_token")).andReturn(oauthToken);
 		expect(request.getParameter("access_token")).andReturn(accessToken);
@@ -117,12 +105,23 @@ public class RequestParameterTest {
 	}
 
 	private Request createRequestMock(String[] values) {
-		Map<String, String> parameterMap = new HashMap<String, String>();
-		MapUtils.putAll(parameterMap, values);
+		Map<String, String[]> parameterMap = new HashMap<String, String[]>();
+		putAll(parameterMap, values);
 		Request request = createMock(Request.class);
 		expect(request.getParameterMap()).andReturn(parameterMap);
 		replay(request);
 		return request;
+	}
+
+	private Map<?, ?> putAll(Map<String, String[]> map, String[] array) {
+		map.size();
+		if ((array == null) || (array.length == 0)) {
+			return map;
+		}
+		for (int i = 0; i < array.length - 1;) {
+			map.put(array[(i++)], new String[] { array[(i++)] });
+		}
+		return map;
 	}
 
 }

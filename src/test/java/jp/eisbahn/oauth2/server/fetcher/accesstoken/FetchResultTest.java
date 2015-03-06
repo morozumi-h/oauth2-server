@@ -18,16 +18,16 @@
 
 package jp.eisbahn.oauth2.server.fetcher.accesstoken;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.eisbahn.oauth2.server.fetcher.accesstoken.AccessTokenFetcher.FetchResult;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import jp.eisbahn.oauth2.server.fetcher.accesstoken.AccessTokenFetcher.FetchResult;
 
 public class FetchResultTest {
 
@@ -52,7 +52,7 @@ public class FetchResultTest {
 
 	@Test
 	public void testParamsProperty() throws Exception {
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, String[]> params = new HashMap<String, String[]>();
 		target.setParams(params);
 		assertEquals(params, target.getParams());
 	}

@@ -18,18 +18,17 @@
 
 package jp.eisbahn.oauth2.server.fetcher.accesstoken.impl;
 
-import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 import java.util.Map;
+
+import jp.eisbahn.oauth2.server.fetcher.accesstoken.AccessTokenFetcher.FetchResult;
+import jp.eisbahn.oauth2.server.models.Request;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import jp.eisbahn.oauth2.server.fetcher.accesstoken.AccessTokenFetcher.FetchResult;
-import jp.eisbahn.oauth2.server.fetcher.accesstoken.impl.AuthHeader;
-import jp.eisbahn.oauth2.server.models.Request;
 
 public class AuthHeaderTest {
 
@@ -98,7 +97,7 @@ public class AuthHeaderTest {
 	public void testParse() throws Exception {
 		Request req;
 		FetchResult parseResult;
-		Map<String, String> params;
+		Map<String, String[]> params;
 
 		req = createRequestMock("Bearer access_token_value");
 		parseResult = target.fetch(req);
@@ -121,10 +120,10 @@ public class AuthHeaderTest {
 		assertEquals("access_token_value", parseResult.getToken());
 		params = parseResult.getParams();
 		assertFalse(params.isEmpty());
-		assertEquals("hmac-sha256", params.get("algorithm"));
-		assertEquals("s8djwd", params.get("nonce"));
-		assertEquals("wOJIO9A2W5mFwDgiDvZbTSMK/PY=", params.get("signature"));
-		assertEquals("137131200", params.get("timestamp"));
+		assertEquals("hmac-sha256", params.get("algorithm")[0]);
+		assertEquals("s8djwd", params.get("nonce")[0]);
+		assertEquals("wOJIO9A2W5mFwDgiDvZbTSMK/PY=", params.get("signature")[0]);
+		assertEquals("137131200", params.get("timestamp")[0]);
 
 		req = createRequestMock(
 				"OAuth access_token_value, "
@@ -136,10 +135,10 @@ public class AuthHeaderTest {
 		assertEquals("access_token_value", parseResult.getToken());
 		params = parseResult.getParams();
 		assertFalse(params.isEmpty());
-		assertEquals("hmac-sha256", params.get("algorithm"));
-		assertEquals("s8djwd", params.get("nonce"));
-		assertEquals("wOJIO9A2W5mFwDgiDvZbTSMK/PY=", params.get("signature"));
-		assertEquals("137131200", params.get("timestamp"));
+		assertEquals("hmac-sha256", params.get("algorithm")[0]);
+		assertEquals("s8djwd", params.get("nonce")[0]);
+		assertEquals("wOJIO9A2W5mFwDgiDvZbTSMK/PY=", params.get("signature")[0]);
+		assertEquals("137131200", params.get("timestamp")[0]);
 
 		req = createRequestMock("evil");
 		try {

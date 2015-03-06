@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * This interface defines some method to retrieve the information from the request
  * for processing each OAuth2.0 authorization.
- * 
+ *
  * @author Yoichiro Tanaka
  *
  */
@@ -41,8 +41,8 @@ public interface Request {
 	 * Retrieve all parameter names and values from the request as a Map instance.
 	 * @return  The map instance which has all parameter names and values.
 	 */
-	public Map<String, String> getParameterMap();
-	
+	public Map<String, String[]> getParameterMap();
+
 	/**
 	 * Retrieve the request header value from the request.
 	 * @param name The header's name.

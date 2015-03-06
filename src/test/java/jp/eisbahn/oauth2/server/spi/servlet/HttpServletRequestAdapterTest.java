@@ -18,8 +18,8 @@
 
 package jp.eisbahn.oauth2.server.spi.servlet;
 
-import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,10 +36,10 @@ public class HttpServletRequestAdapterTest {
 		expect(request.getParameter("name1")).andReturn("value1");
 		expect(request.getHeader("name2")).andReturn("value2");
 		@SuppressWarnings("serial")
-		Map<String, String> map = new HashMap<String, String>() {
+		Map<String, String[]> map = new HashMap<String, String[]>() {
 			{
-				put("k1", "v1");
-				put("k2", "v2");
+				put("k1", new String[]{"v1"});
+				put("k2", new String[]{"v2"});
 			}
 		};
 		expect(request.getParameterMap()).andReturn(map);
@@ -47,10 +47,10 @@ public class HttpServletRequestAdapterTest {
 		HttpServletRequestAdapter target = new HttpServletRequestAdapter(request);
 		assertEquals("value1", target.getParameter("name1"));
 		assertEquals("value2", target.getHeader("name2"));
-		Map<String, String> parameterMap = target.getParameterMap();
+		Map<String, String[]> parameterMap = target.getParameterMap();
 		assertEquals(2, parameterMap.size());
-		assertEquals("v1", parameterMap.get("k1"));
-		assertEquals("v2", parameterMap.get("k2"));
+		assertEquals("v1", parameterMap.get("k1")[0]);
+		assertEquals("v2", parameterMap.get("k2")[0]);
 		verify(request);
 	}
 

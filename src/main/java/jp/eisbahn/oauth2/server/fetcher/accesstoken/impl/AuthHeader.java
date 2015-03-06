@@ -31,7 +31,7 @@ import jp.eisbahn.oauth2.server.utils.Util;
  * This class fetches an access token from Authorization Request header.
  * Actually, the access token is clipped from the header string with a regular
  * expression.
- * 
+ *
  * @author Yoichiro Tanaka
  *
  */
@@ -46,7 +46,7 @@ public class AuthHeader implements AccessTokenFetcher {
 	/**
 	 * Return whether an access token is included in the Authorization
 	 * request header.
-	 * 
+	 *
 	 * @param request The request object.
 	 * @return If the header value has an access token, this result is true.
 	 */
@@ -61,7 +61,7 @@ public class AuthHeader implements AccessTokenFetcher {
 	 * Fetch an access token from an Authorization request header and return it.
 	 * This method must be called when a result of the match() method is true
 	 * only.
-	 * 
+	 *
 	 * @param request The request object.
 	 * @return the fetched access token.
 	 */
@@ -74,7 +74,7 @@ public class AuthHeader implements AccessTokenFetcher {
 				"parse() method was called when match() result was false.");
 		}
 		String token = matcher.group(2);
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, String[]> params = new HashMap<String, String[]>();
 		int end = matcher.end();
 		if (header.length() != end) {
 			header = header.substring(end);
@@ -84,7 +84,7 @@ public class AuthHeader implements AccessTokenFetcher {
 				String[] keyValue = exp.split("=", 2);
 				String value = keyValue[1].replaceFirst("^\"", "");
 				value = value.replaceFirst("\"$", "");
-				params.put(keyValue[0], Util.decodeParam(value));
+				params.put(keyValue[0], new String[]{Util.decodeParam(value)});
 			}
 		}
 		return new FetchResult(token, params);

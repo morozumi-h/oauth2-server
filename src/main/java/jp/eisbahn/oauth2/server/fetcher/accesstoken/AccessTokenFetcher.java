@@ -28,7 +28,7 @@ import jp.eisbahn.oauth2.server.models.Request;
  * access token or not. The actual fetching process is executed in the fetch()
  * method. This fetch() method must be called when a result of the match()
  * method is true only.
- * 
+ *
  * @author Yoichiro Tanaka
  *
  */
@@ -53,14 +53,14 @@ public interface AccessTokenFetcher {
 	/**
 	 * This is a holder class to has an access token with the AccessTokenFetcher
 	 * instance.
-	 * 
+	 *
 	 * @author Yoichiro Tanaka
 	 *
 	 */
 	public static class FetchResult {
 
 		private String token;
-		private Map<String, String> params;
+		private Map<String, String[]> params;
 
 		/**
 		 * This constructor initializes like both parameters become a null value.
@@ -74,7 +74,7 @@ public interface AccessTokenFetcher {
 		 * @param token The access token string.
 		 * @param params Other parameters.
 		 */
-		public FetchResult(String token, Map<String, String> params) {
+		public FetchResult(String token, Map<String, String[]> params) {
 			super();
 			this.token = token;
 			this.params = params;
@@ -100,7 +100,7 @@ public interface AccessTokenFetcher {
 		 * Set other parameters.
 		 * @param params The other parameter map object.
 		 */
-		public void setParams(Map<String, String> params) {
+		public void setParams(Map<String, String[]> params) {
 			this.params = params;
 		}
 
@@ -108,7 +108,7 @@ public interface AccessTokenFetcher {
 		 * Retrieve the other parameters.
 		 * @return The other parameter map object.
 		 */
-		public Map<String, String> getParams() {
+		public Map<String, String[]> getParams() {
 			return params;
 		}
 
